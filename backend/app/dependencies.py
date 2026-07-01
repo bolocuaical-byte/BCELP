@@ -1,6 +1,7 @@
 from typing import Generator, List
 
 from fastapi import Depends, HTTPException, status
+from sqlalchemy.orm import Session
 
 from app.security import oauth2_scheme
 from app.services.auth_service import AuthService
@@ -12,14 +13,16 @@ def get_db_session() -> Generator:
     yield from get_db()
 
 
-def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db_session),
+) -> User:
     try:
         payload = AuthService.decode_access_token(token)
         user_id = payload.get("sub")
     except Exception:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid authentication credentials")
 
-    db = next(get_db())
     user = db.query(User).get(user_id)
     if not user or user.is_deleted:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found or inactive")

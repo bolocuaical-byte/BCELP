@@ -2,8 +2,9 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
 
-from app.schemas.auth import Token, TokenRefresh, LoginRequest
+from app.schemas.auth import Token, TokenRefresh
 from app.schemas.user import UserCreate, UserRead
 from app.services.auth_service import AuthService
 from app.services.user_service import UserService
@@ -13,8 +14,10 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/token", response_model=Token)
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    db = next(get_db_session())
+def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db_session),
+):
     user = UserService.get_by_email(db, form_data.username)
     if not user or not AuthService.verify_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
@@ -31,13 +34,11 @@ def refresh_token(payload: TokenRefresh):
     if not rt:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
     access_token = AuthService.create_access_token(str(rt.user_id))
-    # optionally revoke and create new refresh token
     return {"access_token": access_token}
 
 
 @router.post("/users", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-def create_user(user_in: UserCreate):
-    db = next(get_db_session())
+def create_user(user_in: UserCreate, db: Session = Depends(get_db_session)):
     user = UserService.create(db, user_in)
     return user
 
