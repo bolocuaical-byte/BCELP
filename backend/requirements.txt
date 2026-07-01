@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+pandas
+numpy
+plotly
+matplotlib
+openpyxl
