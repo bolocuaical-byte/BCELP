@@ -62,3 +62,32 @@ docker compose up --build
 - `GET /labs/`, `POST /labs/`, `GET /labs/{id}`, `PUT /labs/{id}`, `DELETE /labs/{id}`
 
 3. Los tests básicos están en `backend/app/tests/`.
+
+## Diagrama ER (Mermaid)
+
+```mermaid
+erDiagram
+	USERS ||--o{ RESEARCH_PROJECTS : owns
+	RESEARCH_PROJECTS ||--o{ RESEARCH_LINES : has
+	RESEARCH_PROJECTS ||--o{ THESIS : contains
+	RESEARCH_GROUPS ||--o{ RESEARCHERS : has
+	RESEARCHERS ||--o{ THESIS : advises
+	EXPERIMENTS ||--o{ TEST_RUNS : includes
+	TEST_RUNS ||--o{ RESULTS : produces
+	EXPERIMENTS ||--o{ DATASETS : records
+	LABORATORIES ||--o{ EQUIPMENT : contains
+	EQUIPMENT ||--o{ INSTRUMENTS : hosts
+	INSTRUMENTS ||--o{ SENSORS : contains
+	VEHICLES ||--o{ DATASETS : produces
+	PUBLICATIONS ||--o{ AUTHORS : includes
+```
+
+## Decisiones de diseño
+
+- Uso de `UUID` como PK en entidades principales para facilitar distribución y referencias externas.
+- Campos `JSON` para `metadata` y `parameters` en `Experiment`, `Dataset` y `TestRun` para flexibilidad de datos experimentales.
+- `SoftDeleteMixin` en todas las entidades para preservar historial y posibilitar auditoría.
+- Modelos relacionados con IA (p. ej. `ai_insights`) no están presentes por defecto; se añadirá como una tabla opcional si se requiere.
+- Mantener modelos y schemas separados: SQLAlchemy en `backend/app/models/` y Pydantic en `backend/app/schemas/`.
+
+Si quieres, genero también un diagrama visual exportable o añado campos adicionales por entidad.

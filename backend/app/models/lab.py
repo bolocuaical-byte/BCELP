@@ -7,6 +7,16 @@ from app.db.base import Base
 from .base import IDMixin, TimestampMixin, SoftDeleteMixin
 
 
+class Laboratory(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
+    __tablename__ = "laboratories"
+
+    name = Column(String(255), nullable=False)
+    location = Column(String(255), nullable=True)
+    description = Column(Text, nullable=True)
+
+    equipment = relationship("Equipment", back_populates="laboratory")
+
+
 class Equipment(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
     __tablename__ = "equipment"
 
@@ -14,8 +24,10 @@ class Equipment(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
     serial_number = Column(String(255), nullable=True)
     location = Column(String(255), nullable=True)
     description = Column(Text, nullable=True)
+    laboratory_id = Column(UUID(as_uuid=True), ForeignKey("laboratories.id"), nullable=True)
 
     inventory_items = relationship("InventoryItem", back_populates="equipment")
+    laboratory = relationship("Laboratory", back_populates="equipment")
 
 
 class InventoryItem(Base, IDMixin, TimestampMixin, SoftDeleteMixin):

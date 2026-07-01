@@ -13,8 +13,10 @@ class Researcher(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     affiliation = Column(String(255), nullable=True)
     bio = Column(Text, nullable=True)
+    group_id = Column(UUID(as_uuid=True), ForeignKey("research_groups.id"), nullable=True)
 
     user = relationship("User")
+    group = relationship("ResearchGroup")
 
 
 class Student(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
