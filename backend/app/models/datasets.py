@@ -15,17 +15,3 @@ class CSVDataset(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
     schema = Column(JSON, nullable=True)
 
 
-class VBOXFile(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
-    __tablename__ = "vbox_files"
-
-    vehicle_id = Column(UUID(as_uuid=True), ForeignKey("vehicles.id"), nullable=True)
-    file_path = Column(String(1024), nullable=False)
-    metadata = Column(JSON, nullable=True)
-
-
-class OBDFile(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
-    __tablename__ = "obd_files"
-
-    vehicle_id = Column(UUID(as_uuid=True), ForeignKey("vehicles.id"), nullable=True)
-    file_path = Column(String(1024), nullable=False)
-    metadata = Column(JSON, nullable=True)

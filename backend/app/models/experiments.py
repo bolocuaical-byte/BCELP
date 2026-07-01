@@ -13,7 +13,7 @@ class Experiment(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
     project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id"), nullable=True)
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
-    metadata = Column(JSON, nullable=True)
+    metadata_json = Column("metadata", JSON, nullable=True)
 
     test_sessions = relationship("TestSession", back_populates="experiment")
 

@@ -23,7 +23,7 @@ class VBOXFile(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
 
     vehicle_id = Column(UUID(as_uuid=True), ForeignKey("vehicles.id"), nullable=True)
     file_path = Column(String(1024), nullable=False)
-    metadata = Column(Text, nullable=True)
+    metadata_json = Column("metadata", Text, nullable=True)
 
     vehicle = relationship("Vehicle", back_populates="vbox_files")
 
@@ -33,6 +33,6 @@ class OBDFile(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
 
     vehicle_id = Column(UUID(as_uuid=True), ForeignKey("vehicles.id"), nullable=True)
     file_path = Column(String(1024), nullable=False)
-    metadata = Column(Text, nullable=True)
+    metadata_json = Column("metadata", Text, nullable=True)
 
     vehicle = relationship("Vehicle", back_populates="obd_files")

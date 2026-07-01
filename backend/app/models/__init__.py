@@ -14,6 +14,7 @@ from .experiments import *  # noqa: F401,F403
 from .datasets import *  # noqa: F401,F403
 from .publications import *  # noqa: F401,F403
 from .reports import *  # noqa: F401,F403
+from .tokens import *  # noqa: F401,F403
 
 __all__ = [
     # base
