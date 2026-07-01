@@ -12,6 +12,12 @@ Entidades principales
 - Student: datos de estudiantes.
 - Laboratory: laboratorio físico o virtual.
 - Equipment: equipos del laboratorio.
+ - Instrument: instrumentos instalados en equipos (p. ej. data acquisition modules).
+ - Sensor: sensores conectados a instrumentos.
+ - CalibrationRecord: registros de calibración para sensores.
+ - MaintenanceRecord: historial de mantenimiento de equipos.
+ - EquipmentReservation: reservas de uso de equipos.
+ - EquipmentDocument: documentos asociados a un equipo (manuales, certificaciones).
 - Vehicle: vehículos sobre los que se realizan pruebas.
 - Battery: celdas, packs y BMS.
 - Experiment: experimento o campaña de pruebas.
@@ -78,6 +84,10 @@ erDiagram
 	LABORATORIES ||--o{ EQUIPMENT : contains
 	EQUIPMENT ||--o{ INSTRUMENTS : hosts
 	INSTRUMENTS ||--o{ SENSORS : contains
+	SENSORS ||--o{ CALIBRATION_RECORDS : has
+	EQUIPMENT ||--o{ MAINTENANCE_RECORDS : has
+	EQUIPMENT ||--o{ EQUIPMENT_RESERVATIONS : schedules
+	EQUIPMENT ||--o{ EQUIPMENT_DOCUMENTS : stores
 	VEHICLES ||--o{ DATASETS : produces
 	PUBLICATIONS ||--o{ AUTHORS : includes
 ```
